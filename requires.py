@@ -4,12 +4,13 @@ from charms.reactive import scopes
 from charms.reactive import is_state
 
 
-class InfluxdbRequires(RelationBase):
+class InfluxdbClient(RelationBase):
     scope = scopes.GLOBAL
     auto_accessors = ['hostname', 'port', 'user', 'password']
 
-    @hook('{requires:influxdb-http}-relation-{joined,changed}')
+    @hook('{requires:influxdb-api}-relation-{joined,changed}')
     def changed(self):
+        self.set_state('{relation_name}.connected')
         data = {
             'hostname': self.hostname(),
             'port': self.port(),
@@ -19,7 +20,7 @@ class InfluxdbRequires(RelationBase):
         if all(data.values()):
             self.set_state('{relation_name}.available')
 
-    @hook('{requires:influxdb-http}-relation-{broken,departed}')
+    @hook('{requires:influxdb-api}-relation-{broken,departed}')
     def broken(self):
         if(is_state('{relation_name}.available')):
             self.remove_state('{relation_name}.available')

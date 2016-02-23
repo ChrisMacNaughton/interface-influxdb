@@ -1,4 +1,3 @@
-name: influxdb-http
-summary: InfluxDB Interface
+name: influxdb-api
+summary: InfluxDB API Interface
 version: 1
-repo:
