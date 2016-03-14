@@ -13,13 +13,15 @@ class InfluxdbApi(RelationBase):
     @hook('{provides:influxdb-api}-relation-{joined,changed}')
     def changed(self):
         for conversation in self.conversations():
-            hookenv.log("Setting api.available for conversation: {}".format(conversation))
+            hookenv.log("Setting api.available for conversation: {}"
+                        .format(conversation))
             conversation.set_state('{relation_name}.api.available')
 
     @hook('{provides:influxdb-api}-relation-{departed,broken}')
     def gone(self):
         for conversation in self.conversations():
-            hookenv.log("Removing api.available for conversation: {}".format(conversation))
+            hookenv.log("Removing api.available for conversation: {}"
+                        .format(conversation))
             conversation.remove_state('{relation_name}.api.available')
 
     def configure(self, port, username, password):
@@ -31,5 +33,6 @@ class InfluxdbApi(RelationBase):
             'password': password,
         }
         for conversation in self.conversations():
-            hookenv.log("Setting up influx for conversation: {}".format(conversation))
+            hookenv.log("Setting up influx for conversation: {}"
+                        .format(conversation))
             conversation.set_remote(**config)
