@@ -10,6 +10,7 @@ class InfluxdbClient(RelationBase):
 
     @hook('{requires:influxdb-api}-relation-{joined,changed}')
     def changed(self):
+        #self.remove_state('{relation_name}.broken')
         self.set_state('{relation_name}.connected')
         data = {
             'hostname': self.hostname(),
@@ -22,5 +23,5 @@ class InfluxdbClient(RelationBase):
 
     @hook('{requires:influxdb-api}-relation-{broken,departed}')
     def broken(self):
-        if(is_state('{relation_name}.available')):
-            self.remove_state('{relation_name}.available')
+        self.remove_state('{relation_name}.available')
+        #self.set_state('{relation_name}.broken')
