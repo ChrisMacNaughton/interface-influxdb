@@ -24,14 +24,16 @@ class InfluxdbApi(RelationBase):
                         .format(conversation))
             conversation.remove_state('{relation_name}.api.available')
 
-    def configure(self, port, username, password):
+    def configure(self, port, username=None, password=None):
         hookenv.log('setting up influx')
         config = {
             'hostname': hookenv.unit_get('private-address'),
             'port': port,
-            'user': username,
-            'password': password,
         }
+        if username is not None:
+            config['user'] = username
+        if password is not None:
+            config['password'] = password
         for conversation in self.conversations():
             hookenv.log("Setting up influx for conversation: {}"
                         .format(conversation))
